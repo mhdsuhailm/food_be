@@ -6,8 +6,12 @@ const cors = require("cors");
 dotenv.config()
 
 const app = express();
+
 app.use(cors());
 app.use(express.json())
+app.get("/", (req, res) => {
+  res.send("Backend is running successfully 🚀");
+});
 app.use("/api/menu", require("./routes/MenuRoutes"));
 // Routes
 app.use("/webhook", require("./routes/webhookRoutes"))
