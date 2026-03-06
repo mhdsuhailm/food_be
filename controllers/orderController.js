@@ -43,11 +43,12 @@ exports.createOrder = async (req, res) => {
 
     const { phone, items, totalAmount } = req.body
 
+    // Save order
     const order = await Order.create(req.body)
 
     console.log("Order saved:", order)
 
-    // Build WhatsApp summary
+    // Build summary
     let summary = `🧾 *Order Summary*\n\n`
 
     items.forEach((item, index) => {
@@ -58,9 +59,10 @@ exports.createOrder = async (req, res) => {
 
     console.log("Sending WhatsApp message to:", phone)
 
+    // Send message
     await whatsappService.sendTextMessage(phone, summary)
 
-    console.log("WhatsApp message sent successfully")
+    console.log("WhatsApp summary sent")
 
     res.json({
       message: "Order placed",
