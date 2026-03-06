@@ -12,26 +12,22 @@ exports.createOrder = async (req, res) => {
       totalAmount
     })
 
-    // Prepare summary text
+    // Build summary message
     let summary = `🧾 *Order Summary*\n\n`
 
-    items.forEach(item => {
-      summary += `🍽 ${item.name} x${item.quantity} = ₹${item.price * item.quantity}\n`
+    items.forEach((item, index) => {
+      summary += `${index + 1}. ${item.name} x${item.quantity} = ₹${item.price * item.quantity}\n`
     })
 
-    summary += `\n💰 Total: ₹${totalAmount}\n\n`
-    summary += `Please confirm your order.`
+    summary += `\n💰 *Total:* ₹${totalAmount}`
 
-    await whatsappService.sendInteractiveButtonMessage(
-      phoneNumber,
-      summary,
-      [
-        { id: `confirm_${order._id}`, title: "✅ Confirm" },
-        { id: `cancel_${order._id}`, title: "❌ Cancel" }
-      ]
-    )
+    // Send message to WhatsApp
+    await whatsappService.sendTextMessage(phoneNumber, summary)
 
-    res.json({ success: true })
+    res.json({
+      success: true,
+      message: "Order saved and summary sent to WhatsApp"
+    })
 
   } catch (error) {
     console.log(error)
