@@ -43,26 +43,23 @@ exports.createOrder = async (req, res) => {
 
     const { phone, items, totalAmount } = req.body
 
-    // Save order
     const order = await Order.create(req.body)
 
     console.log("Order saved:", order)
 
-    // Build summary
     let summary = `🧾 *Order Summary*\n\n`
 
     items.forEach((item, index) => {
       summary += `${index + 1}. ${item.name} x${item.quantity} = ₹${item.price * item.quantity}\n`
     })
 
-    summary += `\n💰 *Total:* ₹${totalAmount}`
+    summary += `\n💰 Total: ₹${totalAmount}`
 
     console.log("Sending WhatsApp message to:", phone)
 
-    // Send message
-    await whatsappService.sendTextMessage(phone, summary)
+    const result = await whatsappService.sendTextMessage(phone, summary)
 
-    console.log("WhatsApp summary sent")
+    console.log("WhatsApp API response:", result)
 
     res.json({
       message: "Order placed",
@@ -70,7 +67,8 @@ exports.createOrder = async (req, res) => {
     })
 
   } catch (error) {
-    console.log("Order error:", error.response?.data || error.message)
+
+    console.log("WhatsApp error:", error.response?.data || error.message)
 
     res.status(500).json({
       error: "Order failed"
