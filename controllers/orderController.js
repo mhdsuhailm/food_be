@@ -3,10 +3,10 @@ const whatsappService = require("../services/whatsappService")
 
 exports.createOrder = async (req, res) => {
   try {
-    const { phoneNumber, category, items, totalAmount } = req.body
+    const { phone, category, items, totalAmount } = req.body
 
     const order = await Order.create({
-      phoneNumber,
+      phone,
       category,
       items,
       totalAmount
@@ -22,8 +22,8 @@ exports.createOrder = async (req, res) => {
     summary += `\n💰 *Total:* ₹${totalAmount}`
 
     // Send message to WhatsApp
-    await whatsappService.sendTextMessage(phoneNumber, summary)
-
+    await whatsappService.sendTextMessage(phone, summary)
+    console.log("WhatsApp message sent successfully")
     res.json({
       success: true,
       message: "Order saved and summary sent to WhatsApp"
@@ -31,6 +31,7 @@ exports.createOrder = async (req, res) => {
 
   } catch (error) {
     console.log(error)
+      console.log("WhatsApp send error:", err.response?.data || err.message)
     res.status(500).json({ success: false })
   }
 }
