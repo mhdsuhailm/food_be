@@ -96,26 +96,26 @@ async sendCTA(to, text, buttonText, urlLink) {
 }
 
 
-async sendImageMessage(to, imageUrl, caption) {
-  await axios.post(
-    `${this.url}/${this.phoneNumberId}/messages`,
-    {
-      messaging_product: "whatsapp",
-      to: to,
-      type: "image",
-      image: {
-        link: imageUrl,
-        caption: caption
-      }
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${this.token}`,
-        "Content-Type": "application/json"
-      }
-    }
-  )
-}
+// async sendImageMessage(to, imageUrl, caption) {
+//   await axios.post(
+//     `${this.url}/${this.phoneNumberId}/messages`,
+//     {
+//       messaging_product: "whatsapp",
+//       to: to,
+//       type: "image",
+//       image: {
+//         link: imageUrl,
+//         caption: caption
+//       }
+//     },
+//     {
+//       headers: {
+//         Authorization: `Bearer ${this.token}`,
+//         "Content-Type": "application/json"
+//       }
+//     }
+//   )
+// }
 
 //   async sendListMessage(to, text, buttonText, sections) {
 //     const messageData = {
@@ -159,6 +159,20 @@ async sendImageMessage(to, imageUrl, caption) {
     
 //     return this.sendMessage(to, messageData);
 //   }
+async sendImageMessage(to, imageUrl, caption) {
+  const messageData = {
+    messaging_product: "whatsapp",
+    recipient_type: "individual",
+    to: to,
+    type: "image",
+    image: {
+      link: imageUrl,
+      caption: caption
+    }
+  }
+
+  return this.sendMessage(to, messageData)
+}
 }
 
 module.exports = new WhatsAppService();
