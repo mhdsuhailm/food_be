@@ -95,6 +95,28 @@ async sendCTA(to, text, buttonText, urlLink) {
   return axios.post(url, payload, { headers: this.headers });
 }
 
+
+async sendImageMessage(to, imageUrl, caption) {
+  await axios.post(
+    `${this.url}/${this.phoneNumberId}/messages`,
+    {
+      messaging_product: "whatsapp",
+      to: to,
+      type: "image",
+      image: {
+        link: imageUrl,
+        caption: caption
+      }
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        "Content-Type": "application/json"
+      }
+    }
+  )
+}
+
 //   async sendListMessage(to, text, buttonText, sections) {
 //     const messageData = {
 //       messaging_product: 'whatsapp',
