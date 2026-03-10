@@ -279,11 +279,11 @@ exports.createOrder = async (req, res) => {
     console.log("Summary sent")
 
     // PREPARING MESSAGE
-    await whatsappService.sendImageMessage(
-      phone,
-      "https://images.unsplash.com/photo-1556911220-e15b29be8c8f",
-      "👨‍🍳 Your food is being prepared!"
-    )
+    // await whatsappService.sendImageMessage(
+    //   phone,
+    //   "https://images.unsplash.com/photo-1556911220-e15b29be8c8f",
+    //   "👨‍🍳 Your food is being prepared!"
+    // )
 
     console.log("Preparing message sent")
 
