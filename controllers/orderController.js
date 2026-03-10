@@ -257,7 +257,8 @@ exports.createOrder = async (req, res) => {
 
     await whatsappService.sendImageMessage(
       user.phone,
-      "https://media.giphy.com/media/l3q2K5jinAlChoCLS/giphy.gif",
+      // "https://media..com/media/l3q2K5jinAlChoCLS/giphy.gif",
+      "https://images.unsplash.com/photo-1556911220-e15b29be8c8f",
       "👨‍🍳 *Your food is being prepared!*"
     )
 
