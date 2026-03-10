@@ -45,7 +45,7 @@ class MessageController {
         if (text === 'hi' || text === 'hello') {
           await whatsappService.sendImageMessage(
     from,
-    "https://res.cloudinary.com/dzk3hte2r/image/upload/v1773042235/d765a89349a5fccc1794ec8e7ba5d9a3c57b177b_hpoulz.png",
+    "https://res.cloudinary.com/dzk3hte2r/image/upload/v1773145799/cresent_logo_fatna5.jpg",
     "Welcome to Cresent 🍽️\n\nAuthentic South Indian & Non-Veg Specials."
   )
           await whatsappService.sendInteractiveButtonMessage(
