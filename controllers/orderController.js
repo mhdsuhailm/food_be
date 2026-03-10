@@ -183,36 +183,56 @@ res.json({
 })
 
 // THEN schedule background messages
-setTimeout(async () => {
-  try {
+// setTimeout(async () => {
+//   try {
 
-    console.log("Sending preparing message")
+//     console.log("Sending preparing message")
 
-    await whatsappService.sendImageMessage(
-      phone,
-      "https://images.unsplash.com/photo-1556911220-e15b29be8c8f",
-      "👨‍🍳 Your food is being prepared!"
-    )
+//     await whatsappService.sendImageMessage(
+//       phone,
+//       "https://images.unsplash.com/photo-1556911220-e15b29be8c8f",
+//       "👨‍🍳 Your food is being prepared!"
+//     )
 
-  } catch (err) {
-    console.log("Preparing message error:", err.response?.data || err.message)
-  }
-}, 3000)
+//   } catch (err) {
+//     console.log("Preparing message error:", err.response?.data || err.message)
+//   }
+// }, 3000)
 
-setTimeout(async () => {
-  try {
+// setTimeout(async () => {
+//   try {
 
-    console.log("Sending ready message")
+//     console.log("Sending ready message")
 
-    await whatsappService.sendTextMessage(
-      phone,
-      "🍽️ Update: Your food will be served in 5 minutes!"
-    )
+//     await whatsappService.sendTextMessage(
+//       phone,
+//       "🍽️ Update: Your food will be served in 5 minutes!"
+//     )
 
-  } catch (err) {
-    console.log("Delayed message error:", err.response?.data || err.message)
-  }
-}, 120000)
+//   } catch (err) {
+//     console.log("Delayed message error:", err.response?.data || err.message)
+//   }
+// }, 120000)
+await whatsappService.sendTextMessage(phone, summary)
+
+console.log("WhatsApp summary sent")
+
+// send preparing message immediately
+await whatsappService.sendImageMessage(
+  phone,
+  "https://images.unsplash.com/photo-1556911220-e15b29be8c8f",
+  "👨‍🍳 Your food is being prepared!"
+)
+
+console.log("Preparing message sent")
+
+// send ready message
+await whatsappService.sendTextMessage(
+  phone,
+  "🍽️ Your food will be served in about 5 minutes!"
+)
+
+console.log("Ready message sent")
 
   } catch (error) {
 
