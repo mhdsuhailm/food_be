@@ -103,9 +103,17 @@ const whatsappService = require("../services/whatsappService")
 exports.createOrder = async (req, res) => {
   try {
 
-    const { phone, items, totalAmount } = req.body
+    const { phone, items } = req.body
 
-    const order = await Order.create(req.body)
+    const totalAmount = items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    )
+
+    const order = await Order.create({
+      ...req.body,
+      totalAmount
+    })
 
     console.log("Order saved:", order)
 
@@ -117,39 +125,48 @@ exports.createOrder = async (req, res) => {
 
     summary += `\n💰 Total: ₹${totalAmount}`
 
-    console.log("Sending WhatsApp message to:", phone)
+    console.log("Sending summary...")
 
-    // 1️⃣ Send order summary
     await whatsappService.sendTextMessage(phone, summary)
 
-    // 2️⃣ After 3 seconds send preparing message
+    console.log("Summary sent successfully")
+
+    // PREPARING MESSAGE
     setTimeout(async () => {
       try {
 
+        console.log("Sending preparing message...")
+
         await whatsappService.sendImageMessage(
           phone,
-          "https://media.giphy.com/media/gg8Q0J4HD2rFm5LTHe/giphy.gif",
-          "👨‍🍳 *Your food is being prepared!*"
+          "https://images.unsplash.com/photo-1556911220-e15b29be8c8f",
+          "👨‍🍳 Your food is being prepared!"
         )
+
+        console.log("Preparing message sent")
 
       } catch (err) {
         console.log("Preparing message error:", err.response?.data || err.message)
       }
     }, 3000)
 
-    // 3️⃣ After 2 minutes send update message
+    // DELAYED MESSAGE
     setTimeout(async () => {
       try {
 
+        console.log("Sending ready message...")
+
         await whatsappService.sendTextMessage(
           phone,
-          "🍽️ *Update:* Your food will be served in *5 minutes*. Thank you for your patience!"
+          "🍽️ Update: Your food will be served in 5 minutes!"
         )
+
+        console.log("Ready message sent")
 
       } catch (err) {
         console.log("Delayed message error:", err.response?.data || err.message)
       }
-    }, 2 * 60 * 1000)
+    }, 120000)
 
     res.json({
       message: "Order placed",
@@ -158,7 +175,7 @@ exports.createOrder = async (req, res) => {
 
   } catch (error) {
 
-    console.log("WhatsApp error:", error.response?.data || error.message)
+    console.log("Order error:", error)
 
     res.status(500).json({
       error: "Order failed"
