@@ -69,7 +69,7 @@ setTimeout(async () => {
     "https://media.giphy.com/media/gg8Q0J4HD2rFm5LTHe/giphy.gif",
     "👨‍🍳 *Your food is being prepared!*"
   )
-
+}, 3000)
  // 🔹 After 2 minutes send another message
     setTimeout(async () => {
       try {
@@ -83,9 +83,6 @@ setTimeout(async () => {
         console.log("Delayed message error:", err.response?.data || err.message)
       }
     }, 2 * 60 * 1000) // 2 minutes
-
-
-}, 3000)
     res.json({
       message: "Order placed",
       order
