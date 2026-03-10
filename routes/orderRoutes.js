@@ -141,65 +141,74 @@
 // });
 
 // module.exports = router;
+// const express = require("express")
+// const router = express.Router()
+// const Order = require("../models/Order")
+// const User = require("../models/User")
+// const authMiddleware = require("../middleware/authMiddleware")
+// const whatsappService = require("../services/whatsappService")
+
+// router.post("/", authMiddleware, async (req, res) => {
+//   try {
+
+//     const user = await User.findById(req.userId)
+
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" })
+//     }
+
+//     const { items, tableNumber } = req.body
+
+//     const totalAmount = items.reduce(
+//       (sum, item) => sum + item.price * item.quantity,
+//       0
+//     )
+
+//     const newOrder = new Order({
+//       userId: user._id,
+//       customerName: user.name,
+//       phone: user.phone,
+//       tableNumber,
+//       items,
+//       totalAmount
+//     })
+
+//     await newOrder.save()
+
+//     // 🔹 Build WhatsApp summary
+//     let summary = `🧾 *Order Summary*\n\n`
+
+//     items.forEach((item, index) => {
+//       summary += `${index + 1}. ${item.name} x${item.quantity} = ₹${item.price * item.quantity}\n`
+//     })
+
+//     summary += `\n💰 *Total:* ₹${totalAmount}`
+
+//     console.log("Sending WhatsApp summary to:", user.phone)
+
+//     // 🔹 Send WhatsApp message
+//     await whatsappService.sendTextMessage(user.phone, summary)
+
+//     console.log("WhatsApp summary sent")
+
+//     res.status(201).json({
+//       message: "Order placed",
+//       order: newOrder
+//     })
+
+//   } catch (error) {
+//     console.log("Order error:", error.response?.data || error.message)
+//     res.status(500).json({ message: error.message })
+//   }
+// })
+
+// module.exports = router
 const express = require("express")
 const router = express.Router()
-const Order = require("../models/Order")
-const User = require("../models/User")
+
 const authMiddleware = require("../middleware/authMiddleware")
-const whatsappService = require("../services/whatsappService")
+const orderController = require("../controllers/orderController")
 
-router.post("/", authMiddleware, async (req, res) => {
-  try {
-
-    const user = await User.findById(req.userId)
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" })
-    }
-
-    const { items, tableNumber } = req.body
-
-    const totalAmount = items.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    )
-
-    const newOrder = new Order({
-      userId: user._id,
-      customerName: user.name,
-      phone: user.phone,
-      tableNumber,
-      items,
-      totalAmount
-    })
-
-    await newOrder.save()
-
-    // 🔹 Build WhatsApp summary
-    let summary = `🧾 *Order Summary*\n\n`
-
-    items.forEach((item, index) => {
-      summary += `${index + 1}. ${item.name} x${item.quantity} = ₹${item.price * item.quantity}\n`
-    })
-
-    summary += `\n💰 *Total:* ₹${totalAmount}`
-
-    console.log("Sending WhatsApp summary to:", user.phone)
-
-    // 🔹 Send WhatsApp message
-    await whatsappService.sendTextMessage(user.phone, summary)
-
-    console.log("WhatsApp summary sent")
-
-    res.status(201).json({
-      message: "Order placed",
-      order: newOrder
-    })
-
-  } catch (error) {
-    console.log("Order error:", error.response?.data || error.message)
-    res.status(500).json({ message: error.message })
-  }
-})
+router.post("/", authMiddleware, orderController.createOrder)
 
 module.exports = router
