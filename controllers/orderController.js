@@ -245,20 +245,52 @@ exports.createOrder = async (req, res) => {
     console.log("Summary sent")
 
     // Preparing message
+    // await whatsappService.sendImageMessage(
+    //   user.phone,
+    //   "https://images.unsplash.com/photo-1556911220-e15b29be8c8f",
+    //   "👨‍🍳 *Your food is being prepared!*"
+    // )
+    setTimeout(async () => {
+  try {
+
+    console.log("Sending preparing message")
+
     await whatsappService.sendImageMessage(
       user.phone,
-      "https://images.unsplash.com/photo-1556911220-e15b29be8c8f",
+      "https://media.giphy.com/media/l3q2K5jinAlChoCLS/giphy.gif",
       "👨‍🍳 *Your food is being prepared!*"
     )
 
     console.log("Preparing message sent")
 
+  } catch (err) {
+    console.log("Preparing message error:", err.response?.data || err.message)
+  }
+}, 10000)
+
+    console.log("Preparing message sent")
+
     // Ready message
+    // await whatsappService.sendTextMessage(
+    //   user.phone,
+    //   `🍽️ Your food will be served shortly at Table ${tableNumber}. Enjoy your meal!`
+    // )
+setTimeout(async () => {
+  try {
+
+    console.log("Sending ready message")
+
     await whatsappService.sendTextMessage(
       user.phone,
-      `🍽️ Your food will be served shortly at Table ${tableNumber}. Enjoy your meal!`
+      `🍽️ *Update:* Your food will be served in about *5 minutes* at Table ${tableNumber}.`
     )
 
+    console.log("Ready message sent")
+
+  } catch (err) {
+    console.log("Ready message error:", err.response?.data || err.message)
+  }
+}, 120000)
     console.log("Ready message sent")
 
     res.status(201).json({
