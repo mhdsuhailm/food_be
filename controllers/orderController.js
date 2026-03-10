@@ -127,51 +127,92 @@ exports.createOrder = async (req, res) => {
 
     console.log("Sending summary...")
 
+    // await whatsappService.sendTextMessage(phone, summary)
+
+    // console.log("Summary sent successfully")
+
+    // // PREPARING MESSAGE
+    // setTimeout(async () => {
+    //   try {
+
+    //     console.log("Sending preparing message...")
+
+    //     await whatsappService.sendImageMessage(
+    //       phone,
+    //       "https://images.unsplash.com/photo-1556911220-e15b29be8c8f",
+    //       "👨‍🍳 Your food is being prepared!"
+    //     )
+
+    //     console.log("Preparing message sent")
+
+    //   } catch (err) {
+    //     console.log("Preparing message error:", err.response?.data || err.message)
+    //   }
+    // }, 3000)
+
+    // // DELAYED MESSAGE
+    // setTimeout(async () => {
+    //   try {
+
+    //     console.log("Sending ready message...")
+
+    //     await whatsappService.sendTextMessage(
+    //       phone,
+    //       "🍽️ Update: Your food will be served in 5 minutes!"
+    //     )
+
+    //     console.log("Ready message sent")
+
+    //   } catch (err) {
+    //     console.log("Delayed message error:", err.response?.data || err.message)
+    //   }
+    // }, 120000)
+
+    // res.json({
+    //   message: "Order placed",
+    //   order
+    // })
     await whatsappService.sendTextMessage(phone, summary)
 
-    console.log("Summary sent successfully")
+console.log("WhatsApp summary sent")
 
-    // PREPARING MESSAGE
-    setTimeout(async () => {
-      try {
+// send response first
+res.json({
+  message: "Order placed",
+  order
+})
 
-        console.log("Sending preparing message...")
+// THEN schedule background messages
+setTimeout(async () => {
+  try {
 
-        await whatsappService.sendImageMessage(
-          phone,
-          "https://images.unsplash.com/photo-1556911220-e15b29be8c8f",
-          "👨‍🍳 Your food is being prepared!"
-        )
+    console.log("Sending preparing message")
 
-        console.log("Preparing message sent")
+    await whatsappService.sendImageMessage(
+      phone,
+      "https://images.unsplash.com/photo-1556911220-e15b29be8c8f",
+      "👨‍🍳 Your food is being prepared!"
+    )
 
-      } catch (err) {
-        console.log("Preparing message error:", err.response?.data || err.message)
-      }
-    }, 3000)
+  } catch (err) {
+    console.log("Preparing message error:", err.response?.data || err.message)
+  }
+}, 3000)
 
-    // DELAYED MESSAGE
-    setTimeout(async () => {
-      try {
+setTimeout(async () => {
+  try {
 
-        console.log("Sending ready message...")
+    console.log("Sending ready message")
 
-        await whatsappService.sendTextMessage(
-          phone,
-          "🍽️ Update: Your food will be served in 5 minutes!"
-        )
+    await whatsappService.sendTextMessage(
+      phone,
+      "🍽️ Update: Your food will be served in 5 minutes!"
+    )
 
-        console.log("Ready message sent")
-
-      } catch (err) {
-        console.log("Delayed message error:", err.response?.data || err.message)
-      }
-    }, 120000)
-
-    res.json({
-      message: "Order placed",
-      order
-    })
+  } catch (err) {
+    console.log("Delayed message error:", err.response?.data || err.message)
+  }
+}, 120000)
 
   } catch (error) {
 
