@@ -60,7 +60,32 @@ exports.createOrder = async (req, res) => {
     const result = await whatsappService.sendTextMessage(phone, summary)
 
     console.log("WhatsApp API response:", result)
+await whatsappService.sendTextMessage(phone, summary)
 
+setTimeout(async () => {
+
+  await whatsappService.sendImageMessage(
+    phone,
+    "https://media.giphy.com/media/gg8Q0J4HD2rFm5LTHe/giphy.gif",
+    "👨‍🍳 *Your food is being prepared!*"
+  )
+
+ // 🔹 After 2 minutes send another message
+    setTimeout(async () => {
+      try {
+
+        await whatsappService.sendTextMessage(
+          phone,
+          "🍽️ *Update:* Your food will be served in *5 minutes*. Thank you for your patience!"
+        )
+
+      } catch (err) {
+        console.log("Delayed message error:", err.response?.data || err.message)
+      }
+    }, 2 * 60 * 1000) // 2 minutes
+
+
+}, 3000)
     res.json({
       message: "Order placed",
       order
